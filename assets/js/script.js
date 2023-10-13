@@ -1,169 +1,112 @@
 console.log(" script chargé ! ");
-calc_array = new Array();
-var calcul=0;
-var pas_ch=0;
-function $id(id)
-{
-        return document.getElementById(id);
-}
-function f_calc(id,n)
-{
-        if(n=='ce')
-        {
-                initialiser_calc(id);
+let arraySignes = ["+" , "*" , "/" , "-"];
+let saisies = []
+let calcCorps = document.createElement("main");
+document.body.appendChild(calcCorps);
+
+
+
+                // ECRAN
+
+let calcEcran = document.createElement("div");
+calcEcran.innerText = 0;
+calcEcran.classList.add("calc-ecran");
+calcCorps.appendChild(calcEcran)
+
+
+                // CLAVIER 
+
+    let calcClavier = document.createElement("div");
+    calcClavier.classList.add("calc-clavier");
+    calcCorps.appendChild(calcClavier)
+
+                            // CLAVIER CHIFFRE
+
+        let clavierChiffres = document.createElement("div");
+        clavierChiffres.classList.add("clavier-chiffres");
+        for (let index = 9; index >= 0; index--) {
+            let boutonChiffre = document.createElement("button");
+            boutonChiffre.innerText = index;
+            boutonChiffre.classList.add("chiffre-boutton");
+            clavierChiffres.appendChild(boutonChiffre);
+            calcClavier.appendChild(clavierChiffres);
+            
         }
-        else if(n=='=')
-        {
-                if(calc_array[id][0]!='=' && calc_array[id][1]!=1)
-                {
-                        eval('calcul='+calc_array[id][2]+calc_array[id][0]+calc_array[id][3]+';');
-                        calc_array[id][0] = '=';
-                        $id(id+'_resultat').value=calcul;
-                        calc_array[id][2]=calcul;
-                        calc_array[id][3]=0;
-                }
+
+            // VIRGULE
+
+        let boutonVirgule = document.createElement("button");
+        boutonVirgule.innerText = ",";
+        boutonVirgule.classList.add("bouton-virgule");
+        calcClavier.appendChild(boutonVirgule);
+
+
+            // SIGNES CLAVIER 
+
+
+        let clavierSignes = document.createElement("div");
+        clavierSignes.classList.add("clavier-signes")
+        calcClavier.appendChild(clavierSignes)
+
+            // SIGNES OPPERATION 
+
+        let signesOpperation = document.createElement("div")
+        signesOpperation.classList.add("signes-opperation")
+        clavierSignes.appendChild(signesOpperation)
+        arraySignes.forEach(arraySigne => {
+            let signesBoutton = document.createElement("button")
+            signesBoutton.classList.add("signes-boutton")
+            signesBoutton.innerText = [arraySigne]
         }
-        else if(n=='+-')
-        {
-                $id(id+'_resultat').value=$id(id+'_resultat').value*(-1);
-                if(calc_array[id][0]=='=')
-                {
-                        calc_array[id][2] = $id(id+'_resultat').value;
-                        calc_array[id][3] = 0;
-                }
-                else
-                {
-                        calc_array[id][3] = $id(id+'_resultat').value;
-                }
-                pas_ch = 1;
-        }
-        else if(n=='nbs')
-        {
-                if($id(id+'_resultat').value<10 && $id(id+'_resultat').value>-10)
-                {
-                        $id(id+'_resultat').value=0;
-                }
-                else
-                {
-                        $id(id+'_resultat').value=$id(id+'_resultat').value.slice(0,$id(id+'_resultat').value.length-1);
-                }
-                if(calc_array[id][0]=='=')
-                {
-                        calc_array[id][2] = $id(id+'_resultat').value;
-                        calc_array[id][3] = 0;
-                }
-                else
-                {
-                        calc_array[id][3] = $id(id+'_resultat').value;
-                }
-        }
-        else
-        {
-                        if(calc_array[id][0]!='=' && calc_array[id][1]!=1)
-                        {
-                                eval('calcul='+calc_array[id][2]+calc_array[id][0]+calc_array[id][3]+';');
-                                $id(id+'_resultat').value=calcul;
-                                calc_array[id][2]=calcul;
-                                calc_array[id][3]=0;
-                        }
-                        calc_array[id][0] = n;
-        }
-        if(pas_ch==0)
-        {
-                calc_array[id][1] = 1;
-        }
-        else
-        {
-                pas_ch=0;
-        }
-        document.getElementById(id+'_resultat').focus();
-        return true;
-}
-function add_calc(id,n)
-{
-        if(calc_array[id][1]==1)
-        {
-                $id(id+'_resultat').value=n;
-        }
-        else
-        {
-                $id(id+'_resultat').value+=n;
-        }
-        if(calc_array[id][0]=='=')
-        {
-                calc_array[id][2] = $id(id+'_resultat').value;
-                calc_array[id][3] = 0;
-        }
-        else
-        {
-                calc_array[id][3] = $id(id+'_resultat').value;
-        }
-        calc_array[id][1] = 0;
-        document.getElementById(id+'_resultat').focus();
-        return true;
-}
-function initialiser_calc(id)
-{
-        $id(id+'_resultat').value=0;
-        calc_array[id] = new Array('=',1,'0','0',0);
-        document.getElementById(id+'_resultat').focus();
-        return true;
-}
-function key_detect_calc(id,evt)
-{
-        if((evt.keyCode>95) && (evt.keyCode<106))
-        {
-                var nbr = evt.keyCode-96;
-                add_calc(id,nbr);
-        }
-        else if((evt.keyCode>47) && (evt.keyCode<58))
-        {
-                var nbr = evt.keyCode-48;
-                add_calc(id,nbr);
-        }
-        else if(evt.keyCode==107)
-        {
-                f_calc(id,'+');
-        }
-        else if(evt.keyCode==109)
-        {
-                f_calc(id,'-');
-        }
-        else if(evt.keyCode==106)
-        {
-                f_calc(id,'*');
-        }
-        else if(evt.keyCode==111)
-        {
-                f_calc(id,'');
-        }
-        else if(evt.keyCode==110)
-        {
-                add_calc(id,'.');
-        }
-        else if(evt.keyCode==190)
-        {
-                add_calc(id,'.');
-        }
-        else if(evt.keyCode==188)
-        {
-                add_calc(id,'.');
-        }
-        else if(evt.keyCode==13)
-        {
-                f_calc(id,'=');
-        }
-        else if(evt.keyCode==46)
-        {
-                f_calc(id,'ce');
-        }
-        else if(evt.keyCode==8)
-        {
-                f_calc(id,'nbs');
-        }
-        else if(evt.keyCode==27)
-        {
-                f_calc(id,'ce');
-        }
-        return true;
-}
+            )
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
